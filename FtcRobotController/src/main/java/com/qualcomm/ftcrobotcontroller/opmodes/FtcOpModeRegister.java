@@ -82,10 +82,15 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("K9TeleOp", K9TeleOp.class);
     manager.register("K9IrSeeker", K9IrSeeker.class);
     manager.register("K9Line", K9Line.class);
+    /*
+    * The following op modes are loosely based on the K9 opmode, but have 1 motor controller,
+     * 1 servo controller, one legacy controller, and one core device interface module
+     */
+    manager.register("BenTeleop", BenTeleop.class);
 
     /*
      * The following example op modes are designed to work with a pushbot-style robot.
-     *  - PushBotManual is a driver controled (tank drive) op mode.
+     *  - PushBotManual is a driver controlled (tank drive) op mode.
      *  - PushBotAuto uses the event driven (non linear) OpMode class for autonomous operation.
      *  - PushBotDriveTouch uses the LinearOpMode class and shows how to autonomously drive if a button is not pressed.
      *  - PushBotIrSeek uses the LinearOpMode class and shows how to track an IR beacon.
