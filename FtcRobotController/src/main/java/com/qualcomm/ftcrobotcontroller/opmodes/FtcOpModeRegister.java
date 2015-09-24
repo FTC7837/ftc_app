@@ -74,15 +74,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("CompassCalibration", CompassCalibration.class);
     //manager.register("I2cAddressChangeExample", LinearI2cAddressChange.class);
 
-    manager.register("K9TeleOp", K9TeleOp.class);
-    manager.register("K9IrSeeker", K9IrSeeker.class);
-    manager.register("K9Line", K9Line.class);
-    /*
-    * The following op modes are loosely based on the K9 opmode, but have 1 motor controller,
-     * 1 servo controller, one legacy controller, and one core device interface module
-     */
-    manager.register("BenTeleop", BenTeleop.class);
-
     //manager.register("NxtTeleOp", NxtTeleOp.class);
     
     //manager.register("LinearK9TeleOp", LinearK9TeleOp.class);
