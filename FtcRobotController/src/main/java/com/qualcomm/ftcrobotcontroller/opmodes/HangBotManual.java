@@ -2,13 +2,14 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+//import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Thundercolts7837 on 9/24/2015.
  */
-public class BenTeleopFull extends OpMode {
+
+public class HangBotManual extends OpMode {
     final static double ARM_MIN_RANGE  = 0.1;
     final static double ARM_MAX_RANGE  = 0.99;
     final static double CLAW_MIN_RANGE  = 0.01;
@@ -25,18 +26,20 @@ public class BenTeleopFull extends OpMode {
 
     // amount to change the claw servo position by
     double clawDelta = 0.005;
-
-    boolean SlowMode = false;
+    boolean SlowCurrent = false;
+    boolean SlowPrevious = false;
 
     DcMotor motorRight;
     DcMotor motorLeft;
+    DcMotor motorArm;
+    DcMotor motorLift;
     //Servo claw;
-   // Servo arm;
+    //Servo arm;
 
     /**
      * Constructor
      */
-    public BenTeleopFull() {
+    public HangBotManual() {
 
     }
 
@@ -67,10 +70,13 @@ public class BenTeleopFull extends OpMode {
 		 */
         motorRight = hardwareMap.dcMotor.get("motor_right");
         motorLeft = hardwareMap.dcMotor.get("motor_left");
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
+        motorArm = hardwareMap.dcMotor.get("motor_arm");
+        motorLift = hardwareMap.dcMotor.get("motor_lift");
 
-       // arm = hardwareMap.servo.get("servo_1");
-       // claw = hardwareMap.servo.get("servo_6");
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        //arm = hardwareMap.servo.get("servo_1");
+        //claw = hardwareMap.servo.get("servo_6");
 
         // assign the starting position of the wrist and claw
         armPosition = 0.2;
@@ -84,6 +90,8 @@ public class BenTeleopFull extends OpMode {
      */
     @Override
     public void loop() {
+
+
 
 		/*
 		 * Gamepad 1
@@ -103,17 +111,40 @@ public class BenTeleopFull extends OpMode {
         // clip the right/left values so that the values never exceed +/- 1
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
-
-
+        SlowCurrent=gamepad1.right_bumper;
+        if ((SlowCurrent) && (!SlowPrevious) )//rising edge
+        {
+            SlowCurrent = !SlowCurrent;//toggle value
+        }
+        SlowPrevious = SlowCurrent;
 
         if (gamepad1.left_bumper) {
             right = left;//Lock Differentials
         }
-        if (gamepad1.left_trigger > 0.5) {
-            SlowMode = true;
+
+        if (gamepad1.dpad_up)
+        {
+            motorLift.setPower(0.8);//Extend Arm
         }
-        if (gamepad1.right_trigger > 0.5) {
-            SlowMode = false;
+        else if(gamepad1.dpad_down)
+        {
+           motorLift.setPower(-0.8); //Retract Arm
+        }
+        else
+        {
+            motorLift.setPower(0);//nothing was pressed
+        }
+
+
+        if (gamepad1.left_trigger > 0.04) {//move arm down
+            motorArm.setPower(-gamepad1.left_trigger/2);
+        }
+       else if (gamepad1.right_trigger > 0.04) {//move arm up
+            motorArm.setPower(gamepad1.right_trigger/2);
+        }
+        else
+        {
+            motorArm.setPower(0);//don't run arm
         }
 
 
@@ -123,7 +154,7 @@ public class BenTeleopFull extends OpMode {
         left =  (float)scaleInput(left);
 
 
-        if (SlowMode) {
+        if (SlowCurrent) {
             right/=4;
             left/=4;
         }
@@ -158,8 +189,8 @@ public class BenTeleopFull extends OpMode {
         clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
 
         // write position values to the wrist and claw servo
-       // arm.setPosition(armPosition);
-       // claw.setPosition(clawPosition);
+        //arm.setPosition(armPosition);
+        //claw.setPosition(clawPosition);
 
 
 
@@ -216,4 +247,45 @@ public class BenTeleopFull extends OpMode {
 
 }
 
+
+
+/*
+*
+*bool shift = false;
+
+if(joy1Btn(1) {
+   if(!shift)
+   {
+       //action
+   }
+   shift = true;
+}
+else {shift = false;}
+*
+*
+* int state=0;
+int lastButton=0;
+int currButton;
+
+while(1 == 1) {
+	getJoystickSettings(joystick);
+
+        currButton=joy1Btn(1);
+        if( (currButton==1) && (lastButton==0) ) {
+
+            if(state>0) {
+	        state=0;
+	    }
+            else {
+	        state=20;
+	    }
+        }
+        lastButton=currButton;
+	motor[mtr_S1_C1_1] = state;
+	wait1Msec(5);
+}
+*
+*
+*
+* */
 
