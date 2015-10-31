@@ -2,13 +2,21 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import android.hardware.SensorManager;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+
+
+
+//import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Thundercolts7837 on 9/24/2015.
  */
-public class BenTeleopFull extends OpMode {
+public class Tilt extends OpMode {
     final static double ARM_MIN_RANGE  = 0.1;
     final static double ARM_MAX_RANGE  = 0.99;
     final static double CLAW_MIN_RANGE  = 0.01;
@@ -28,6 +36,16 @@ public class BenTeleopFull extends OpMode {
 
     boolean SlowMode = false;
 
+    float deltaX=0;
+    float deltaY=0;
+    float deltaZ=0;
+    float lastX=0;
+    float lastY=0;
+    float lastZ=0;
+    float x=0;
+    float y=0;
+    float z=0;
+
     DcMotor motorRight;
     DcMotor motorLeft;
     //Servo claw;
@@ -36,7 +54,7 @@ public class BenTeleopFull extends OpMode {
     /**
      * Constructor
      */
-    public BenTeleopFull() {
+    public Tilt() {
 
     }
 
@@ -69,6 +87,16 @@ public class BenTeleopFull extends OpMode {
         motorLeft = hardwareMap.dcMotor.get("motor_left");
         motorRight.setDirection(DcMotor.Direction.REVERSE);
 
+
+
+        SensorManager sensorService = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
+        if (sensorService != null) {
+            Sensor bubble = sensorService.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (bubble != null) {
+                // Use the magnetic field sensor here
+                x=SensorManager.AXIS_X;
+            }
+        }
        // arm = hardwareMap.servo.get("servo_1");
        // claw = hardwareMap.servo.get("servo_6");
 
@@ -158,6 +186,7 @@ public class BenTeleopFull extends OpMode {
         clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
 
         // write position values to the wrist and claw servo
+        // don't have servo.
        // arm.setPosition(armPosition);
        // claw.setPosition(clawPosition);
 
@@ -169,11 +198,14 @@ public class BenTeleopFull extends OpMode {
 		 * will return a null value. The legacy NXT-compatible motor controllers
 		 * are currently write only.
 		 */
+        x=SensorManager.AXIS_X;
+
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("arm", "arm:  " + String.format("%.2f", armPosition));
         telemetry.addData("claw", "claw:  " + String.format("%.2f", clawPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+        telemetry.addData("x=",x);
 
     }
 
@@ -214,6 +246,45 @@ public class BenTeleopFull extends OpMode {
         return dScale;
     }
 
+
+   // @Override
+    public void onSensorChanged(SensorEvent event) {
+
+
+        // get the change of the x,y,z values of the accelerometer
+        deltaX = Math.abs(lastX - event.values[0]);
+        deltaY = Math.abs(lastY - event.values[1]);
+        deltaZ = Math.abs(lastZ - event.values[2]);
+
+        // if the change is below 2, it is just plain noise
+        if (deltaX < 2)
+            deltaX = 0;
+        if (deltaY < 2)
+            deltaY = 0;
+        if (deltaZ < 2)
+            deltaZ = 0;
+
+        // set the last know values of x,y,z
+        lastX = event.values[0];
+        lastY = event.values[1];
+        lastZ = event.values[2];
+
+
+    }
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
 
 

@@ -2,13 +2,14 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+//import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Thundercolts7837 on 9/24/2015.
  */
-public class BenTeleopFull extends OpMode {
+public class odstest extends OpMode {
     final static double ARM_MIN_RANGE  = 0.1;
     final static double ARM_MAX_RANGE  = 0.99;
     final static double CLAW_MIN_RANGE  = 0.01;
@@ -30,13 +31,14 @@ public class BenTeleopFull extends OpMode {
 
     DcMotor motorRight;
     DcMotor motorLeft;
+    OpticalDistanceSensor odsSensor;
     //Servo claw;
    // Servo arm;
 
     /**
      * Constructor
      */
-    public BenTeleopFull() {
+    public odstest() {
 
     }
 
@@ -75,6 +77,10 @@ public class BenTeleopFull extends OpMode {
         // assign the starting position of the wrist and claw
         armPosition = 0.2;
         clawPosition = 0.2;
+       OpticalDistanceSensor odsSensor = hardwareMap.opticalDistanceSensor.get("odsSensor");
+        double odsReading = odsSensor.getLightDetected();
+
+        telemetry.addData("ods value,", odsReading);
     }
 
     /*
@@ -103,6 +109,16 @@ public class BenTeleopFull extends OpMode {
         // clip the right/left values so that the values never exceed +/- 1
         right = Range.clip(right, -1, 1);
         left = Range.clip(left, -1, 1);
+
+//        try {
+//            double odsReading = odsSensor.getLightDetected();
+//
+//            telemetry.addData("ods value,", odsReading);
+//        }catch(NullPointerException e)
+//        {
+//            ;
+//        }
+
 
 
 
