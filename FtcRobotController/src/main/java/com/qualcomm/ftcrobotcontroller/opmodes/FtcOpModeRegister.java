@@ -56,8 +56,8 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
     manager.register("NullOp", NullOp.class);
-
-    //manager.register("K9TeleOp", K9TeleOp.class);
+   // manager.register("K9TeleOp", K9TeleOp.class);
+    //
     //manager.register("K9IrSeeker", K9IrSeeker.class);
     //manager.register("K9Line", K9Line.class);
     //manager.register ("PushBotAuto", PushBotAuto.class);
@@ -67,10 +67,11 @@ public class FtcOpModeRegister implements OpModeRegister {
      * 1 servo controller, one legacy controller, and one core device interface module
      */
     //manager.register("BenTeleop", BenTeleop.class);
-    manager.register("BenTeleopFull", BenTeleopFull.class);
-    manager.register("test92615A", test92615A.class);
-    manager.register("BenTeleop", BenTeleop.class);
+    //manager.register("BenTeleopFull", BenTeleopFull.class);
+    //manager.register("test92615A", test92615A.class);
+    //manager.register("BenTeleop", BenTeleop.class);
     manager.register("HangBotManual", HangBotManual.class);
+    manager.register("HangBotWEncoder", HangBotWEncoder.class);
     //manager.register("odstest", odstest.class);
     //manager.register("Tilt", Tilt.class);
     /*
@@ -80,11 +81,12 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("AdafruitRGBExample", AdafruitRGBExample.class);
     //manager.register("MRRGBExample", MRRGBExample.class);
     //manager.register("ColorSensorDriver", ColorSensorDriver.class);
-    manager.register("HTRGBExample", HTRGBExample.class);
-
+    //manager.register("MRRGBExampleHang", MRRGBExampleHangbot.class);
+    //manager.register("MRRGBExampleUnbrick", MRRGBExampleUnbrick.class);
+    //manager.register("MRGyroTest", MRGyroTest.class);
     //manager.register("IrSeekerOp", IrSeekerOp.class);
     //manager.register("CompassCalibration", CompassCalibration.class);
-    //manager.register("I2cAddressChangeExample", LinearI2cAddressChange.class);
+    //manager.register("I2cAddressChangeExample", LinearI2cAddressChangeHangBotTest.class);
 
     //manager.register("NxtTeleOp", NxtTeleOp.class);
     
